@@ -1,0 +1,7 @@
+<h1>Demos</h1>
+<p>The following demos are available:</p>
+<ul>
+<% @demos.each do |demo| %>
+  <li><%= link_to demo, demo_path(demo) %></li>
+<% end %>
+</ul>

@@ -4,7 +4,7 @@ class SamplesController < ApplicationController
   end
 
   def show
-    @sample = params['id']
+    @sample = params[:id]
   end
 
   private
