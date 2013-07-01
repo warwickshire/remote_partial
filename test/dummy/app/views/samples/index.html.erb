@@ -1,0 +1,7 @@
+<h1>Samples</h1>
+<p>The following samples are available:</p>
+<ul>
+<% @samples.each do |sample| %>
+  <li><%= link_to sample, sample_path(sample) %></li>
+<% end %>
+</ul>
