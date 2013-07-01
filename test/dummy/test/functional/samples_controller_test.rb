@@ -7,7 +7,7 @@ class SamplesControllerTest < ActionController::TestCase
   end
 
   test "should get show" do
-    get :show
+    get :show, id: 'one'
     assert_response :success
   end
 

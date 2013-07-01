@@ -7,7 +7,7 @@ class DemosControllerTest < ActionController::TestCase
   end
 
   test "should get show" do
-    get :show
+    get :show, id: 'fixed'
     assert_response :success
   end
 
