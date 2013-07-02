@@ -7,17 +7,23 @@ require "remote_partial/version"
 Gem::Specification.new do |s|
   s.name        = "remote_partial"
   s.version     = RemotePartial::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of RemotePartial."
-  s.description = "TODO: Description of RemotePartial."
+  s.authors     = ["Rob Nichols"]
+  s.email       = ["rob@undervale.co.uk"]
+  s.homepage    = "https://github.com/warwickshire/remote_partial"
+  s.summary     = "RemotePartial adds the facility to grab content from remote sites and add them as partials to the host app."
+  s.description = <<EOF
+RemotePartial comprises:
+  a system to grab content from a remote page and copy that content into partials;
+  a scheduler to allow content to be regularly updated;
+  a helper method to ease inclusion of the partial with a view"
+EOF
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency "rails", "~> 3.2.13"
+  s.add_dependency "rails"
   s.add_dependency "nokogiri"
+  s.add_dependency "strong_parameters"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "webmock"
