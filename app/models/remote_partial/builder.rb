@@ -1,7 +1,7 @@
 
 module RemotePartial
   class Builder
-    attr_reader :args
+    attr_reader :args, :partial
 
     def self.build(args)
       builder = new(args)
@@ -18,10 +18,10 @@ module RemotePartial
 
 
     def create_or_update_partial
-      partial = Partial.find_or_initialize_by_name(args[:name])
-      partial.url = args[:url]
-      partial.criteria = args[:criteria]
-      partial.save
+      @partial = Partial.find_or_initialize_by_name(args[:name])
+      @partial.url = args[:url]
+      @partial.criteria = args[:criteria]
+      @partial.save
     end
   end
 end

@@ -24,6 +24,7 @@ EOF
   s.add_dependency "rails"
   s.add_dependency "nokogiri"
   s.add_dependency "strong_parameters"
+  s.add_dependency 'delayed_job_active_record'
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "webmock"
