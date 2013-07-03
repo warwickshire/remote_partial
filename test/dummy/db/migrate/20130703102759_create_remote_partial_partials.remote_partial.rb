@@ -5,6 +5,7 @@ class CreateRemotePartialPartials < ActiveRecord::Migration
       t.string :name,    limit: 100,   null: false
       t.text   :url,     limit: 0x7ff, null: false
       t.string :criteria
+      t.float  :repeat_period
       t.timestamps
     end
   end

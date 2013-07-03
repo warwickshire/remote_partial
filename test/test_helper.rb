@@ -14,3 +14,13 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 if ActiveSupport::TestCase.method_defined?(:fixture_path=)
   ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures", __FILE__)
 end
+
+class ActiveSupport::TestCase
+  fixtures :all
+
+
+  def assert_equal_ignoring_cr(expected, testing, comment = nil)
+    cr = "\n"
+    assert_equal(expected, testing.gsub(cr, ""), comment)
+  end
+end

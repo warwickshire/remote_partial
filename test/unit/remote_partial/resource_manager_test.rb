@@ -55,10 +55,7 @@ module RemotePartial
       Nokogiri::HTML(Net::HTTP.get(URI(@url)))
     end
 
-    def assert_equal_ignoring_cr(expected, testing, comment = nil)
-      cr = "\n"
-      assert_equal(expected, testing.gsub(cr, ""), comment)
-    end
+
 
   end
 end
