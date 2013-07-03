@@ -8,12 +8,13 @@ module RemotePartial
     def setup
       @url = "http://www.worcestershire.gov.uk"
       @body = "<body><p>One</p><h1>Foo</h1><p>Bar</p></body>"
-      stub_request(:get, @url).
-        with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
-        to_return(:status => 200, :body => @body, :headers => {})
-
+      enable_mock(@url, @body)
       @path = 'temp/file.text'
       File.delete(@path) if File.exists?(@path)
+    end
+
+    def teardown
+      disable_mock
     end
 
     def test_stub

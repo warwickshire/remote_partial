@@ -1,8 +1,11 @@
 require "remote_partial/engine"
-require 'delayed_job_active_record'
-require 'webmock'
-WebMock.disable! unless ENV["RAILS_ENV"] == "test"
 
+begin
+  require 'webmock'
+  WebMock.disable! if defined?(WebMock)
+rescue LoadError
+  # Ignore - WebMock not available
+end
 module RemotePartial
 
   def self.define(args = {})

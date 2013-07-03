@@ -5,8 +5,13 @@ module RemotePartial
 
     def setup
       @name = 'foo'
-      @url = 'bar'
+      @url = Partial.find(1).url
+      enable_mock(@url)
       new_builder
+    end
+
+    def teardown
+      disable_mock
     end
 
     def test_create_or_update_partial

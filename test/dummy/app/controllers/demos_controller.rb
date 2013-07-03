@@ -10,7 +10,9 @@ class DemosController < ApplicationController
   private
   def demos
     [
-      'fixed'
+      'fixed',
+      'clock',
+      'ruby'
     ]
   end
 end

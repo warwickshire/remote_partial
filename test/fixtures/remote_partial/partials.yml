@@ -5,5 +5,6 @@ wcc:
   name: simple
   url: 'http://www.warwickshire.gov.uk'
   criteria: 'p:first-child'
+  repeat_period: <%= 10.minutes %>
 
 

@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-
-# Cannot expect this file to exist in the host app, so have commented it out
-# TODO: Test if this functionality is needed, and if so add it within engine code rather than dummy
-
-#require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
-#require 'delayed/command'
-#Delayed::Command.new(ARGV).daemonize

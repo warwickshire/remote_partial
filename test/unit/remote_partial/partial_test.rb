@@ -3,13 +3,15 @@ require 'test_helper'
 module RemotePartial
   class PartialTest < ActiveSupport::TestCase
 
-    def setup
+    def setup      
       @partial = Partial.find(1)
       @first_p = '<p>One</p>'
       @body = "<body><h1>Foo</h1><div>#{@first_p}<p>Bar</p></div></body>"
-      stub_request(:get, @partial.url).
-        with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
-        to_return(:status => 200, :body => @body, :headers => {})
+      enable_mock(@partial.url, @body)
+    end
+
+    def teardown
+      disable_mock
     end
 
     def test_output_file_name
@@ -27,6 +29,12 @@ module RemotePartial
 
     def remove_output_file
       File.delete(@partial.output_file_name) if File.exists?(@partial.output_file_name)
+    end
+
+    def test_stale_at
+      @partial.save
+      expected = @partial.updated_at + @partial.repeat_period
+      assert_equal expected.to_s(:db), @partial.stale_at.to_s(:db)
     end
   end
 end

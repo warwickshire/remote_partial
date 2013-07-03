@@ -18,6 +18,16 @@ end
 class ActiveSupport::TestCase
   fixtures :all
 
+  def enable_mock(url, body = '<body><h1>Something</h1><p>Else</p></body>')
+    WebMock.enable!
+    stub_request(:get, url).
+      with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
+      to_return(:status => 200, :body => body, :headers => {})
+  end
+
+  def disable_mock
+    WebMock.disable!
+  end
 
   def assert_equal_ignoring_cr(expected, testing, comment = nil)
     cr = "\n"

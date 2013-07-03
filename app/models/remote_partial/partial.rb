@@ -3,6 +3,8 @@ module RemotePartial
   class Partial < ActiveRecord::Base
     include ActiveModel::ForbiddenAttributesProtection
 
+    before_save :reset_stale_at
+
     validates :name, :url, presence: true
 
     def output_file_name
@@ -21,6 +23,18 @@ module RemotePartial
       ResourceManager.new(url, criteria)
     end
 
+    def perform
+      update_file
+    end
+    
+    def repeat_period
+      super.present? ? super : 60
+    end
+
+    def reset_stale_at
+      self.stale_at = Time.now + repeat_period
+    end
+
     private
     def partial_folder
       RemotePartial.partial_location.gsub(tailing_slash_pattern, "")
@@ -33,8 +47,6 @@ module RemotePartial
     def tailing_slash_pattern
       /\/$/
     end
-
-
 
   end
 end
