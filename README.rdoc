@@ -1,3 +1,57 @@
 = RemotePartial
 
-This project rocks and uses MIT-LICENSE.
+This rails engine allows partials to be created from remote content.
+
+== Defining a remote partial
+
+Define the remote partials in an initializer (config/initializers/remote_partial.rb)
+
+    RemotePartial.define(
+      url: 'http://www.ruby-lang.org/en/',
+      name: 'ruby',
+      criteria: '#intro',
+      minimum_life: 3.hours
+    )
+
+This will create a partial at:
+
+    app/veiws/remote_partials/_ruby.html.erb
+
+The content of this partial will be grabbed from the page at the url, and will
+comprise the content defined by '#intro' (that is, the content of the tag with
+an id='intro'). This content will not be updated for at least 3 hours.
+
+== Criteria
+
+Nokogiri is used to extract content from within the target page. Criteria are
+passed to Nokogiri's search method, and can be either xpath or css format. See:
+
+http://nokogiri.org/tutorials/searching_a_xml_html_document.html
+
+== Adding remote partial content to a page
+
+To output the content of the remote partial 'ruby' to a rails view add this:
+
+    <%= render_remote_partial 'ruby' %>
+
+== Updating the content
+
+The content update process is run each time the host app is loaded. An update can
+also be triggered by running the follow rake task:
+
+    rake remote_partial:update
+
+Each time a remote partial is updated, its partial.stale_at is set as the
+current datetime plus the minimum life of that partial (defaults to 1 minute).
+If an update process is run before the stale_at time, that partial will not be
+updated.
+
+So once the 'ruby' remote partial has been updated, it will be at least three
+hours before it will be updated again.
+
+== Problems grabbing content
+
+If remote partial is unable to retrieve remote content, the problem will be
+logged, and a retrieval will be tried again at the next update.
+
+This project wobbles and uses MIT-LICENSE.
