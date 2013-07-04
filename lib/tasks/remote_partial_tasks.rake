@@ -1,4 +1,4 @@
-namespace :remote_patial do
+namespace :remote_partial do
 
   desc "Updates remote partials"
   task :update => :environment do
