@@ -4,8 +4,9 @@ module RemotePartial
   class BuilderTest < ActiveSupport::TestCase
 
     def setup
+      @partial = Partial.find(1)
       @name = 'foo'
-      @url = Partial.find(1).url
+      @url = @partial.url
       enable_mock(@url)
       new_builder
     end
@@ -32,13 +33,52 @@ module RemotePartial
     end
 
     def test_build
-       assert_difference 'RemotePartial::Partial.count' do
-         Builder.build(
-           url: @url,
-           name: @name
-         )
-       end
-       assert_equal(@name, Partial.last.name)
+      assert_expected_file_created do
+        assert_difference 'RemotePartial::Partial.count' do
+          Builder.build(
+            url: @url,
+            name: @name
+          )
+        end
+        assert_equal(@name, Partial.last.name)
+      end
+    end
+    
+    def test_build_with_existing_stale_partial
+      assert(@partial.stale?, "Partial needs to be stale at start of test")
+      assert_output_file_updated do
+        assert_no_difference 'RemotePartial::Partial.count' do
+          Builder.build(
+            url: @partial.url,
+            name: @partial.name
+          )
+        end
+      end
+    end
+    
+    def test_build_with_existing_partial
+      @partial.update_stale_at
+      assert_output_file_not_updated do
+        assert_no_difference 'RemotePartial::Partial.count' do
+          Builder.build(
+            url: @partial.url,
+            name: @partial.name
+          )
+        end
+      end
+    end
+
+    def assert_expected_file_created(&test)
+      remove_file expected_output_file_name
+      test.call
+      assert_file_exists expected_output_file_name
+      remove_file expected_output_file_name
+    end
+
+    def assert_expected_file_not_created(&test)
+      remove_file @partial.output_file_name
+      test.call
+      assert_file_does_not_exist @partial.output_file_name
     end
 
     def new_builder
@@ -46,6 +86,10 @@ module RemotePartial
           name: @name,
           url: @url
       )
+    end
+
+    def expected_output_file_name
+      @expected_output_file_name ||= @partial.output_file_name.gsub(@partial.name, @name)
     end
   end
 end

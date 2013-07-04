@@ -20,21 +20,47 @@ module RemotePartial
     end
 
     def test_update_file
-      remove_output_file
-      @partial.update_file
-      assert(File.exists?(@partial.output_file_name), "File should exist: #{@partial.output_file_name}")
-      assert_equal_ignoring_cr @first_p, File.read(@partial.output_file_name)
-      remove_output_file
+      assert_output_file_updated(@first_p) do
+        @partial.update_file
+      end
+
     end
 
-    def remove_output_file
-      File.delete(@partial.output_file_name) if File.exists?(@partial.output_file_name)
-    end
-
-    def test_stale_at
-      @partial.save
+    def test_update_stale_at
+      @partial.update_stale_at
       expected = @partial.updated_at + @partial.repeat_period
       assert_equal expected.to_s(:db), @partial.stale_at.to_s(:db)
     end
+
+    def test_stale_at_not_updated_unless_stale
+      test_update_stale_at
+      before = @partial.stale_at
+      @partial.save
+      assert_equal before, @partial.stale_at
+    end
+
+    def test_stale_at_reset_if_stale
+      @partial.stale_at = 1.hour.ago
+      test_update_stale_at
+    end
+
+    def test_update_stale_file
+      assert_output_file_updated(@first_p) do
+        @partial.update_stale_file
+      end
+    end
+
+    def test_update_stale_file_when_not_stale
+      test_update_stale_at
+      assert_output_file_not_updated do
+        @partial.update_stale_file
+      end
+    end
+
+    def test_update_file_not_affected_by_stale_state
+      test_update_stale_at
+      test_update_file
+    end
+
   end
 end

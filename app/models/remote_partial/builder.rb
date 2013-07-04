@@ -14,9 +14,8 @@ module RemotePartial
     
     def run
       create_or_update_partial
-      partial.perform
+      partial.update_stale_file
     end
-
 
     def create_or_update_partial
       @partial = Partial.find_or_initialize_by_name(args[:name])

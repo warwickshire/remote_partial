@@ -33,4 +33,36 @@ class ActiveSupport::TestCase
     cr = "\n"
     assert_equal(expected, testing.gsub(cr, ""), comment)
   end
+
+  def remove_file(file_name)
+    File.delete(file_name) if File.exists?(file_name)
+  end
+
+  def assert_file_exists(file_name)
+    assert(File.exists?(file_name), "File should exist: #{file_name}")
+  end
+
+  def assert_file_does_not_exist(file_name)
+    assert(!File.exists?(file_name), "File should not exist: #{file_name}")
+  end
+
+
+  def assert_output_file_updated(content = nil, &test)
+    remove_output_file
+    test.call
+    assert_file_exists @partial.output_file_name
+    assert_equal_ignoring_cr(content, File.read(@partial.output_file_name)) if content
+    remove_output_file
+  end
+
+  def assert_output_file_not_updated(&test)
+    remove_output_file
+    test.call
+    assert_file_does_not_exist @partial.output_file_name
+  end
+
+  def remove_output_file
+    remove_file @partial.output_file_name
+  end
+
 end
