@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
 
+  root :to => 'demos#index'
+
   resources :demos, only: [:index, :show]
 
-  resources :samples, only: [:index, :show]
 
-  mount RemotePartial::Engine => "/remote_partial"
 end
