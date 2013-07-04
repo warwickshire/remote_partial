@@ -1,3 +1,4 @@
+{<img src="https://codeclimate.com/github/warwickshire/remote_partial.png" />}[https://codeclimate.com/github/warwickshire/remote_partial]
 = RemotePartial
 
 This rails engine allows partials to be created from remote content.
