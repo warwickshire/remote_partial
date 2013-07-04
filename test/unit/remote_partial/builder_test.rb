@@ -7,7 +7,7 @@ module RemotePartial
       @partial = Partial.find(1)
       @name = 'foo'
       @url = @partial.url
-      enable_mock(@url)
+      enable_mock @url
       new_builder
     end
 
@@ -58,6 +58,18 @@ module RemotePartial
     
     def test_build_with_existing_partial
       @partial.update_stale_at
+      assert_output_file_not_updated do
+        assert_no_difference 'RemotePartial::Partial.count' do
+          Builder.build(
+            url: @partial.url,
+            name: @partial.name
+          )
+        end
+      end
+    end
+
+    def test_build_with_http_error
+      enable_mock_connection_failure @url
       assert_output_file_not_updated do
         assert_no_difference 'RemotePartial::Partial.count' do
           Builder.build(

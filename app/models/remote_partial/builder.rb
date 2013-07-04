@@ -15,6 +15,8 @@ module RemotePartial
     def run
       create_or_update_partial
       partial.update_stale_file
+    rescue RemotePartialRetrivalError => error
+      Rails.logger.warn error.message
     end
 
     def create_or_update_partial
