@@ -2,6 +2,12 @@
 
 This rails engine allows partials to be created from remote content.
 
+== Installation
+
+Add this to your Gemfile:
+
+    gem 'remote_partial'
+
 == Defining a remote partial
 
 Define the remote partials in an initializer (config/initializers/remote_partial.rb)

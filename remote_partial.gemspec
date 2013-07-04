@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = <<EOF
 RemotePartial comprises:
   a system to grab content from a remote page and copy that content into partials;
-  a scheduler to allow content to be regularly updated;
+  a process to allow content to be regularly updated;
   a helper method to ease inclusion of the partial with a view"
 EOF
 

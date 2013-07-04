@@ -9,3 +9,6 @@ test/dummy/app/views/remote_partials/*.*
 
 # rvm configuration file
 .rvmrc
+
+# ignore gem files
+*.gem
