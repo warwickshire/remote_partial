@@ -5,7 +5,7 @@ test/dummy/db/*.sqlite3
 test/dummy/log/*.log
 test/dummy/tmp/
 test/dummy/.sass-cache
-test/dummy/app/views/remote_partial/_clock.html
+test/dummy/app/views/remote_partials/_clock.html.erb
 
 # rvm configuration file
 .rvmrc
