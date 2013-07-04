@@ -25,6 +25,18 @@ class ActiveSupport::TestCase
       to_return(:status => 200, :body => body, :headers => {})
   end
 
+  def enable_mock_connection_failure(url, status = 400)
+    WebMock.enable!
+    stub_request(:get, url).
+      with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
+      to_return(:status => status, :body => 'Whoops!', :headers => {})
+  end
+
+  def enable_mock_connection_error(url)
+    WebMock.enable!
+    stub_request(:get, url).to_raise(SocketError.new("Some connection error"))
+  end
+
   def disable_mock
     WebMock.disable!
   end

@@ -52,6 +52,20 @@ module RemotePartial
       assert_equal_ignoring_cr(@body, File.read(@path))
     end
 
+    def test_connection_failure    
+      enable_mock_connection_failure @url
+      assert_raise RemotePartialRetrivalError do
+        ResourceManager.new(@url, 'body').html
+      end
+    end
+
+    def test_connection_failure_due_to_invalid_url
+      enable_mock_connection_error @url
+      assert_raise RemotePartialRetrivalError do
+        ResourceManager.new(@url, 'body').html
+      end
+    end
+
     def content
       Nokogiri::HTML(Net::HTTP.get(URI(@url)))
     end

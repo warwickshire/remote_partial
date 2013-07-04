@@ -10,7 +10,18 @@ module RemotePartial
     end
 
     def self.get_raw(url)
-      Net::HTTP.get(URI(url))
+      response = Net::HTTP.get_response(URI(url))
+      
+      case response.code.to_i
+      when ok_response_codes
+        return response.body
+      when redirect_response_codes
+        get_raw(URI.parse(response['location']))
+      else
+        raise response.inspect
+      end
+    rescue => exception # Do main exception raising outside of case statement so that SocketErrors are also handled
+      raise RemotePartialRetrivalError.new(url, exception)
     end
 
     def initialize(url, criteria = nil)
@@ -41,6 +52,14 @@ module RemotePartial
 
     def output_folder_exists?
       Dir.exists?(output_folder)
+    end
+
+    def self.ok_response_codes
+      200..299
+    end
+
+    def self.redirect_response_codes
+      300..399
     end
 
   end
