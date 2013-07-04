@@ -35,7 +35,7 @@ module RemotePartial
     def test_stale_at_not_updated_unless_stale
       test_update_stale_at
       before = @partial.stale_at
-      @partial.save
+      @partial.update_stale_at
       assert_equal before, @partial.stale_at
     end
 

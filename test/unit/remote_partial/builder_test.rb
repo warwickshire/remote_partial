@@ -80,6 +80,12 @@ module RemotePartial
       end
     end
 
+    def test_stale_at_not_modified_if_unable_to_retrieve
+      expected = @partial.stale_at
+      test_build_with_http_error
+      assert_equal(expected, @partial.reload.stale_at)
+    end
+
     def assert_expected_file_created(&test)
       remove_file expected_output_file_name
       test.call
