@@ -42,15 +42,11 @@ module RemotePartial
 
     private
     def partial_folder
-      RemotePartial.partial_location.gsub(tailing_slash_pattern, "")
+      RemotePartial.partial_location
     end
 
     def file_name
       "_#{name}.html.erb"
-    end
-
-    def tailing_slash_pattern
-      /\/$/
     end
 
   end
