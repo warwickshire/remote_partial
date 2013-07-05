@@ -9,6 +9,14 @@ Add this to your Gemfile:
 
     gem 'remote_partial'
 
+== Database
+
+To add to the host app, a migration that will create the table used to store
+remote partial data, run these rake tasks
+
+    rake remote_partial:install:migrations
+    rake db:migrate
+
 == Defining a remote partial
 
 Define the remote partials in an initializer (config/initializers/remote_partial.rb)
@@ -60,5 +68,16 @@ hours before it will be updated again.
 
 If remote partial is unable to retrieve remote content, the problem will be
 logged, and a retrieval will be tried again at the next update.
+
+== The partial view folder
+
+Remote partials are held in:
+
+    app/veiws/remote_partials
+
+To use an alternative location add this to an initializer (before the first
+define statement:
+
+    RemotePartial.partial_location = /path/to/folder
 
 This project wobbles and uses MIT-LICENSE.
