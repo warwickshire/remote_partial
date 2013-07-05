@@ -6,5 +6,11 @@ namespace :remote_partial do
     # partials are reloaded on application start.
     Rails.logger.info "Updated remote partials at #{Time.now.to_s(:db)}"
   end
+
+  desc "Force update of all remote partials"
+  task :force_update => :environment do
+    RemotePartial::Partial.all.each{|partial| puts partial.name if partial.update_file }
+    Rails.logger.info "Forced update of remote partials at #{Time.now.to_s(:db)}"
+  end
   
 end
