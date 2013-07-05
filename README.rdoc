@@ -73,10 +73,10 @@ logged, and a retrieval will be tried again at the next update.
 
 Remote partials are held in:
 
-    app/veiws/remote_partials
+    Rails.root + '/app/veiws/remote_partials'
 
 To use an alternative location add this to an initializer (before the first
-define statement:
+define statement):
 
     RemotePartial.partial_location = /path/to/folder
 
