@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    remote_partial (0.0.1)
+    remote_partial (0.1.0)
       nokogiri
       rails
 

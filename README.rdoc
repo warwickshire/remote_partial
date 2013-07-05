@@ -64,6 +64,11 @@ updated.
 So once the 'ruby' remote partial has been updated, it will be at least three
 hours before it will be updated again.
 
+These is also a rake task that will force all partials to update irrespective
+of the stale_at time:
+
+    rake remote_partial:force_update
+
 == Problems grabbing content
 
 If remote partial is unable to retrieve remote content, the problem will be
@@ -74,10 +79,5 @@ logged, and a retrieval will be tried again at the next update.
 Remote partials are held in:
 
     Rails.root + '/app/veiws/remote_partials'
-
-To use an alternative location add this to an initializer (before the first
-define statement):
-
-    RemotePartial.partial_location = /path/to/folder
 
 This project wobbles and uses MIT-LICENSE.

@@ -14,17 +14,7 @@ module RemotePartial
   end
 
   def self.partial_location
-    path = @partial_location || File.expand_path('app/views/remote_partials', Rails.root)
-    path.gsub(tailing_slash_pattern, "")
-  end
-
-  def self.partial_location=(path)
-    @partial_location = path
-  end
-
-  private
-  def self.tailing_slash_pattern
-    /\/$/
+    File.expand_path('app/views/remote_partials', Rails.root)
   end
 
 end
