@@ -3,7 +3,7 @@ require 'net/http'
 
 module RemotePartial
   class ResourceManager
-    attr_reader :content, :url, :criteria
+    attr_reader :url, :criteria
 
     def self.get_page(url)
       Nokogiri::HTML(get_raw(url))
@@ -26,13 +26,15 @@ module RemotePartial
 
     def initialize(url, criteria = nil)
       @url = url
-      @content = self.class.get_page(url)
       @criteria = criteria
     end
 
     def html
-      return content.to_s unless criteria
-      content.search(criteria).to_s
+      if criteria
+        self.class.get_page(@url).search(criteria).to_s
+      else
+        self.class.get_raw(@url).force_encoding('UTF-8')
+      end
     end
 
     def output_to(path)

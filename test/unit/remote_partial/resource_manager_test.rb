@@ -32,7 +32,7 @@ module RemotePartial
 
     def test_html
       resource_manager = ResourceManager.new(@url)
-      assert_equal content.to_s, resource_manager.html
+      assert_equal raw_content, resource_manager.html
     end
 
     def test_html_with_limit
@@ -66,8 +66,12 @@ module RemotePartial
       end
     end
 
+    def raw_content
+      Net::HTTP.get(URI(@url))
+    end
+
     def content
-      Nokogiri::HTML(Net::HTTP.get(URI(@url)))
+      Nokogiri::HTML(raw_content)
     end
 
 

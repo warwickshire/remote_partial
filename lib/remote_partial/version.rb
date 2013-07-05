@@ -1,9 +1,17 @@
 module RemotePartial
-  VERSION = "0.1.1"
+  VERSION = "0.2.0"
 end
 
 # History
 # =======
+#
+# 0.2.0 UTF-8 Fix
+# ---------------
+# Fixes a fundamental flaw in earlier versions. Previously the encoding used in
+# the file transfer from the remote site was not being set.
+#
+# Also Nokogiri was appending header information on to page, so this version
+# only uses Nokogiri if part of the page needs to be extracted via criteria.
 #
 # 0.1.1 Remove option to alter remote_partials destination folder
 # ---------------------------------------------------------------
