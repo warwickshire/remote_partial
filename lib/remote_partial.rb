@@ -1,4 +1,5 @@
 require "remote_partial/engine"
+require_relative '../app/models/remote_partial/exceptions'
 
 begin
   require 'webmock'
