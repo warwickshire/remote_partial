@@ -12,3 +12,6 @@ test/dummy/app/views/remote_partials/*.*
 
 # ignore gem files
 *.gem
+
+# ignore Gemfile.lock as this is an engine
+Gemfile.lock
