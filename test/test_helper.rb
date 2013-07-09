@@ -3,6 +3,8 @@ ENV["RAILS_ENV"] = "test"
 
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require "rails/test_help"
+require 'webmock'
+require 'webmock/minitest'
 require 'webmock/test_unit'
 
 Rails.backtrace_cleaner.remove_silencers!
@@ -19,26 +21,19 @@ class ActiveSupport::TestCase
   fixtures :all
 
   def enable_mock(url, body = '<body><h1>Something</h1><p>Else</p></body>')
-    WebMock.enable!
     stub_request(:get, url).
       with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
       to_return(:status => 200, :body => body, :headers => {})
   end
 
   def enable_mock_connection_failure(url, status = 400)
-    WebMock.enable!
     stub_request(:get, url).
       with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
       to_return(:status => status, :body => 'Whoops!', :headers => {})
   end
 
   def enable_mock_connection_error(url)
-    WebMock.enable!
     stub_request(:get, url).to_raise(SocketError.new("Some connection error"))
-  end
-
-  def disable_mock
-    WebMock.disable!
   end
 
   def assert_equal_ignoring_cr(expected, testing, comment = nil)

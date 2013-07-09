@@ -11,10 +11,6 @@ module RemotePartial
       new_builder
     end
 
-    def teardown
-      disable_mock
-    end
-
     def test_create_or_update_partial
       assert_difference 'RemotePartial::Partial.count' do
         @builder.create_or_update_partial

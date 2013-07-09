@@ -13,10 +13,6 @@ module RemotePartial
       File.delete(@path) if File.exists?(@path)
     end
 
-    def teardown
-      disable_mock
-    end
-
     def test_stub
       assert_equal_ignoring_cr(@body, content.search('body').to_s)
     end

@@ -10,10 +10,6 @@ module RemotePartial
       enable_mock(@partial.url, @body)
     end
 
-    def teardown
-      disable_mock
-    end
-
     def test_output_file_name
       expected = "#{RemotePartial.partial_location}/_#{@partial.name}.html.erb"
       assert_equal expected, @partial.output_file_name
