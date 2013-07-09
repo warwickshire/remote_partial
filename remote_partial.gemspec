@@ -25,5 +25,5 @@ EOF
   s.add_dependency "nokogiri"
 
   s.add_development_dependency "sqlite3"
-  s.add_development_dependency "webmock"
+#  s.add_development_dependency "webmock"
 end
