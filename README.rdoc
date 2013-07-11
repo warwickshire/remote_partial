@@ -9,14 +9,6 @@ Add this to your Gemfile:
 
     gem 'remote_partial'
 
-== Database
-
-To add to the host app, a migration that will create the table used to store
-remote partial data, run these rake tasks
-
-    rake remote_partial:install:migrations
-    rake db:migrate
-
 == Defining a remote partial
 
 Define the remote partials in an initializer (config/initializers/remote_partial.rb)
@@ -79,5 +71,11 @@ logged, and a retrieval will be tried again at the next update.
 Remote partials are held in:
 
     Rails.root + '/app/veiws/remote_partials'
+
+== Persistence
+
+The current state of each defined remote partial is stored in a YAML file:
+
+    db/remote_partial/partials.yml
 
 This project wobbles and uses MIT-LICENSE.

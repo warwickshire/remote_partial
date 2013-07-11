@@ -1,9 +1,17 @@
 module RemotePartial
-  VERSION = "0.2.1"
+  VERSION = "0.3.0"
 end
 
 # History
 # =======
+#
+# 0.3.0 Partials persisted via YAML
+# ---------------------------------
+# Moved partial data to a YAML file to remove the dependency on ActiveRecord.
+#
+# A database table was being used to store partial data. However, the amount of
+# data being stored is small, and adding a reliance on ActiveRecord to store
+# this data was limiting where RemotePartial could be used.
 #
 # 0.2.1 Initial migrate issue
 # ---------------------------
