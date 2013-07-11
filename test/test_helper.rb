@@ -18,7 +18,6 @@ if ActiveSupport::TestCase.method_defined?(:fixture_path=)
 end
 
 class ActiveSupport::TestCase
-  fixtures :all
 
   def enable_mock(url, body = '<body><h1>Something</h1><p>Else</p></body>')
     stub_request(:get, url).

@@ -4,10 +4,19 @@ module RemotePartial
   class PartialTest < ActiveSupport::TestCase
 
     def setup      
-      @partial = Partial.find(1)
+      @partial = Partial.create(
+        name: :simple,
+        url: 'http://www.warwickshire.gov.uk',
+        criteria: 'p:first-child',
+        repeat_period:  10.minutes
+      )
       @first_p = '<p>One</p>'
       @body = "<body><h1>Foo</h1><div>#{@first_p}<p>Bar</p></div></body>"
       enable_mock(@partial.url, @body)
+    end
+
+    def teardown
+      File.delete(Partial.file) if File.exists?(Partial.file)
     end
 
     def test_output_file_name
@@ -24,8 +33,20 @@ module RemotePartial
 
     def test_update_stale_at
       @partial.update_stale_at
-      expected = @partial.updated_at + @partial.repeat_period
-      assert_equal expected.to_s(:db), @partial.stale_at.to_s(:db)
+      @expected = @partial.updated_at + @partial.repeat_period
+      assert_equal @expected.to_s(:db), @partial.stale_at.to_s(:db)
+    end
+
+    def test_stale_at_gets_into_hash
+      test_update_stale_at
+      hash = @partial.to_hash
+      assert_equal @expected.to_s(:db), hash['stale_at'].to_s(:db)
+    end
+
+    def test_stale_at_gets_into_file
+      test_update_stale_at
+      partial = Partial.find(@partial.name)
+      assert_equal partial.stale_at, @partial.stale_at
     end
 
     def test_stale_at_not_updated_unless_stale

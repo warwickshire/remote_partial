@@ -1,8 +1,8 @@
 
 module RemotePartial
-  class Partial < ActiveRecord::Base
+  class Partial < YamlStore
 
-    validates :name, :url, presence: true
+    attr_accessor :stale_at, :repeat_period
 
     def output_file_name
       [partial_folder, file_name].join("/")
@@ -10,6 +10,7 @@ module RemotePartial
 
     def update_file
       resource_manager.output_to output_file_name
+      update_stale_at
     end
 
     def update_stale_file
@@ -25,7 +26,11 @@ module RemotePartial
     end
     
     def repeat_period
-      super.present? ? super : 60
+      @repeat_period ||= default_repeat_period
+    end
+
+    def default_repeat_period
+      60
     end
 
     def update_stale_at
@@ -33,11 +38,20 @@ module RemotePartial
     end
 
     def reset_stale_at
-      update_attribute(:stale_at, (Time.now + repeat_period))
+      self.stale_at = (Time.now + repeat_period)
+      save
+    end
+
+    def stale_at
+      @stale_at || self[:stale_at] || self['stale_at']
     end
 
     def stale?
       stale_at.blank? or stale_at < Time.now
+    end
+
+    def to_hash
+      super.merge('stale_at' => stale_at)
     end
 
     private
