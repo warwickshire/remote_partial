@@ -1,9 +1,13 @@
 module RemotePartial
-  VERSION = "0.3.0"
+  VERSION = "0.3.1"
 end
 
 # History
 # =======
+#
+# 0.3.1 Remove migration file
+# ---------------------------
+# Migration file is no longer needed but had been left in code.
 #
 # 0.3.0 Partials persisted via YAML
 # ---------------------------------
