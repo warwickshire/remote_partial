@@ -14,7 +14,6 @@ module RemotePartial
     
     def run
       create_or_update_partial
-#      puts "stale_at: #{@partial.stale_at}, and stale? == #{@partial.stale?}"
       partial.update_stale_file
     rescue RemotePartialRetrivalError => error
       Rails.logger.warn error.message

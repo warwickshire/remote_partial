@@ -30,7 +30,7 @@ module RemotePartial
     end
 
     def default_repeat_period
-      60
+      1.minute
     end
 
     def update_stale_at
