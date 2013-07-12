@@ -18,6 +18,7 @@ RemotePartial comprises:
   a helper method to ease inclusion of the partial with a view"
 EOF
 
+  s.license = 'MIT-LICENSE'
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
 
