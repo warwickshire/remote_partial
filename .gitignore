@@ -7,8 +7,9 @@ test/dummy/tmp/
 test/dummy/.sass-cache
 
 # ignore files created by application
-test/dummy/app/views/remote_partials/*
-test/dummy/db/remote_partial/*
+test/dummy/app/views/remote_partials/
+test/dummy/db/remote_partial/
+test/dummy/test/db/
 
 # rvm configuration file
 .rvmrc

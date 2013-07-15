@@ -8,16 +8,16 @@ module RemotePartial
     end
 
     def test_root
-      assert_equal(fixture_path, YamlStore.root)
+      assert_equal(test_db_path, YamlStore.root)
     end
     
     def test_file
-      expected = File.expand_path('remote_partial/yaml_stores.yml', fixture_path)
+      expected = File.expand_path('remote_partial/yaml_stores.yml', test_db_path)
       assert_equal(expected, YamlStore.file)
     end
 
     def test_dir
-      expected = File.expand_path('remote_partial', fixture_path)
+      expected = File.expand_path('remote_partial', test_db_path)
       assert_equal(expected, YamlStore.dir)
     end
 
@@ -129,8 +129,8 @@ module RemotePartial
       assert_equal(expected, YamlStore.string_keys(sample))
     end
 
-    def fixture_path
-      File.expand_path('../../dummy/test/fixtures', File.dirname(__FILE__))
+    def test_db_path
+      File.expand_path('../../dummy/test/db', File.dirname(__FILE__))
     end
   end
 end

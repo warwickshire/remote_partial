@@ -33,7 +33,7 @@ module RemotePartial
     end
 
     def self.root
-      location = Rails.env == 'test' ? 'test/fixtures' : 'db'
+      location = Rails.env == 'test' ? 'test/db' : 'db'
       File.expand_path(location, Rails.root)
     end
 
