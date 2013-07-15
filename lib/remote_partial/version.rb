@@ -1,9 +1,17 @@
 module RemotePartial
-  VERSION = "0.3.1"
+  VERSION = "0.3.2"
 end
 
 # History
 # =======
+#
+# 0.3.2 Move location where db is stored in test environment
+# ----------------------------------------------------------
+# The yaml file created by the Partial model during tests, had been put into
+# test/fixtures, but this is the wrong place because this is not a fixture. In
+# apps that use fixtures, the app would try to load the file as a fixture.
+#
+# The test yml file is now stored as test/db/partials.yml
 #
 # 0.3.1 Remove migration file
 # ---------------------------
