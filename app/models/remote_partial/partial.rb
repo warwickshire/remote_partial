@@ -9,7 +9,7 @@ module RemotePartial
     end
 
     def update_file
-      resource_manager.output_to output_file_name
+      resource_manager.output_to(output_file_name)
       update_stale_at
     end
 
@@ -22,7 +22,7 @@ module RemotePartial
     end
 
     def resource_manager
-      ResourceManager.new(url, criteria)
+      ResourceManager.new(url, criteria, &output_modifier_to_lambda)
     end
     
     def repeat_period
@@ -61,6 +61,10 @@ module RemotePartial
 
     def file_name
       "_#{name}.html.erb"
+    end
+
+    def output_modifier_to_lambda
+      output_modifier? ? instance_eval("lambda #{output_modifier}") : nil
     end
 
   end

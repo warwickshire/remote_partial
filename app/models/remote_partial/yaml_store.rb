@@ -24,6 +24,10 @@ module RemotePartial
       new(item.merge(name: name)) if item
     end
 
+    def self.all
+      read.keys.collect{|name| find(name)}
+    end
+
     def self.count
       read.keys.length
     end

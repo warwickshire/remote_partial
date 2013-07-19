@@ -22,6 +22,7 @@ module RemotePartial
     def create_or_update_partial
       @partial = Partial.find(args['name']) || Partial.new(name: args['name'])
       track_change(args, 'url')
+      track_change(args, 'output_modifier')
       track_change(args, 'criteria')
       track_change(args, 'repeat_period', @partial.default_repeat_period)
 

@@ -3,7 +3,7 @@ require 'net/http'
 
 module RemotePartial
   class ResourceManager
-    attr_reader :url, :criteria
+    attr_reader :url, :criteria, :output_modifier
 
     def self.get_page(url)
       Nokogiri::HTML(get_raw(url))
@@ -24,17 +24,10 @@ module RemotePartial
       raise RemotePartialRetrivalError.new(url, exception)
     end
 
-    def initialize(url, criteria = nil)
+    def initialize(url, criteria = nil, &output_modifier)
       @url = url
       @criteria = criteria
-    end
-
-    def html
-      if criteria
-        self.class.get_page(@url).search(criteria).to_s
-      else
-        self.class.get_raw(@url).force_encoding('UTF-8')
-      end
+      @output_modifier = output_modifier
     end
 
     def output_to(path)
@@ -43,7 +36,20 @@ module RemotePartial
       File.write(path, html)
     end
 
+    def html
+      text = criteria ? get_part_of_page : get_whole_page
+      output_modifier ? output_modifier.call(text) : text
+    end
+
     private
+    def get_whole_page
+      self.class.get_raw(@url).force_encoding('UTF-8')
+    end
+
+    def get_part_of_page
+      self.class.get_page(@url).search(criteria).to_s
+    end
+
     def output_folder
       File.dirname(@path)
     end

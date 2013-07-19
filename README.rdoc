@@ -35,6 +35,25 @@ passed to Nokogiri's search method, and can be either xpath or css format. See:
 
 http://nokogiri.org/tutorials/searching_a_xml_html_document.html
 
+If no criteria are specified, the whole page will be retrieved.
+
+== Output modifier
+
+A lambda can be passed into RemotePartial.define, and this will be called
+on the retrieved content before the partial file is generated.
+
+Note that the lambda must be passed in as a string so it can be stored in a
+serialized format. RemotePartial will convert the string into a lambda when it
+is needed.
+
+For example, to change all instances of 'foo' to 'bar' in the partial:
+
+    RemotePartial.define(
+      url: 'http://somewhere.com',
+      name: 'foo_bar',
+      output_modifier: '{|content| content.gsub(/foo/, "bar")}'
+    )
+
 == Adding remote partial content to a page
 
 To output the content of the remote partial 'ruby' to a rails view add this:

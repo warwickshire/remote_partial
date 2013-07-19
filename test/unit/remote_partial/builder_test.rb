@@ -92,6 +92,20 @@ module RemotePartial
       assert_equal(expected, Partial.find(@partial.name).stale_at)
     end
 
+    def test_builder_with_output_modifier
+      output_modifier = '{|t| "Hello"}'
+      name = 'partial_with_mod'
+      assert_difference 'RemotePartial::Partial.count' do
+        Builder.build(
+          url: @partial.url,
+          name: 'partial_with_mod',
+          output_modifier: output_modifier
+        )
+      end
+      partial = Partial.find(name)
+      assert_equal(output_modifier, partial.output_modifier)
+    end
+
     def assert_expected_file_created(&test)
       remove_file expected_output_file_name
       test.call

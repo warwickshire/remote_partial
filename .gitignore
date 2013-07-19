@@ -13,6 +13,7 @@ test/dummy/test/db/
 
 # rvm configuration file
 .rvmrc
+.ruby-*
 
 # ignore gem files
 *.gem

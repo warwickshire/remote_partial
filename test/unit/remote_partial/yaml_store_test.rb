@@ -93,6 +93,16 @@ module RemotePartial
       assert_equal @content, yaml_store.content
     end
 
+    def test_all
+      yaml_store = YamlStore.create(name: 'Foo', colour:'Red')
+      yaml_store_2 = YamlStore.create(name: 'Bar', colour:'Red')
+      assert_equal([yaml_store, yaml_store_2], YamlStore.all)
+    end
+
+    def test_all_with_no_items
+      assert_equal([], YamlStore.all)
+    end
+
     def test_count
       assert_equal 0, YamlStore.count
       test_create

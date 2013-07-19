@@ -1,9 +1,14 @@
 module RemotePartial
-  VERSION = "0.3.2"
+  VERSION = "0.4.0"
 end
 
 # History
 # =======
+#
+# 0.4.0 Add facility to modify the partial file before it is saved
+# ----------------------------------------------------------------
+# A modification can now be made to the content retrieved from the
+# remote page, before it is saved as a partial.
 #
 # 0.3.2 Move location where db is stored in test environment
 # ----------------------------------------------------------

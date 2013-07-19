@@ -28,7 +28,14 @@ module RemotePartial
       assert_output_file_updated(@first_p) do
         @partial.update_file
       end
+    end
 
+    def test_update_file_with_output_modifier
+      @partial.output_modifier = '{|text| text.gsub(/One/, "Two")}'
+      expected = '<p>Two</p>'
+      assert_output_file_updated(expected) do
+        @partial.update_file
+      end
     end
 
     def test_update_stale_at

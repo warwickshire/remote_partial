@@ -42,6 +42,12 @@ module RemotePartial
       assert_equal_ignoring_cr expected, resource_manager.html
     end
 
+    def test_html_with_proc_mod
+      expected = '<p>One</p><p>Two</p>'
+      resource_manager = ResourceManager.new(@url, 'p') {|text| text.gsub(/Bar/, 'Two')}
+      assert_equal_ignoring_cr expected, resource_manager.html
+    end
+
     def test_output_to
       test_html_with_limit
       @resource_manager.output_to(@path)
