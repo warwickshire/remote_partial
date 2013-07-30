@@ -43,7 +43,16 @@ module RemotePartial
 
     private
     def get_whole_page
-      self.class.get_raw(@url).force_encoding('UTF-8')
+      self.class.get_raw(@url).force_encoding(encoding).gsub(windows_bom_text, "")
+    end
+
+    # Windows editors add a BOM to the start of text files, and this needs to be removed
+    def windows_bom_text
+      "\xEF\xBB\xBF".force_encoding(encoding)
+    end
+
+    def encoding
+      "UTF-8"
     end
 
     def get_part_of_page

@@ -1,9 +1,15 @@
 module RemotePartial
-  VERSION = "0.4.0"
+  VERSION = "0.5.0"
 end
 
 # History
 # =======
+#
+# 0.5.0 Improves handling of remote content from Windows system
+# -------------------------------------------------------------
+# Windows editors add a byte order mark (BOM) to the start of text files.
+# To provide consistent behaviour, this is now removed before the partial
+# is created.
 #
 # 0.4.0 Add facility to modify the partial file before it is saved
 # ----------------------------------------------------------------
