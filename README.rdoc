@@ -89,7 +89,7 @@ logged, and a retrieval will be tried again at the next update.
 
 Remote partials are held in:
 
-    Rails.root + '/app/veiws/remote_partials'
+    Rails.root + '/app/views/remote_partials'
 
 == Persistence
 
