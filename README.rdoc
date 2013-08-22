@@ -60,6 +60,11 @@ To output the content of the remote partial 'ruby' to a rails view add this:
 
     <%= render_remote_partial 'ruby' %>
 
+If your application does not recognise that method, add this to the
+ApplicationController:
+
+    helper RemotePartial::ApplicationHelper
+
 == Updating the content
 
 The content update process is run each time the host app is loaded. An update can
