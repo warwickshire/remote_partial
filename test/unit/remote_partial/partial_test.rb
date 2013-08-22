@@ -3,16 +3,8 @@ require 'test_helper'
 module RemotePartial
   class PartialTest < ActiveSupport::TestCase
 
-    def setup      
-      @partial = Partial.create(
-        name: :simple,
-        url: 'http://www.warwickshire.gov.uk',
-        criteria: 'p:first-child',
-        repeat_period:  10.minutes
-      )
-      @first_p = '<p>One</p>'
-      @body = "<body><h1>Foo</h1><div>#{@first_p}<p>Bar</p></div></body>"
-      enable_mock(@partial.url, @body)
+    def setup
+      create_partial_for('http://www.warwickshire.gov.uk')
     end
 
     def teardown
@@ -28,6 +20,12 @@ module RemotePartial
       assert_output_file_updated(@first_p) do
         @partial.update_file
       end
+    end
+
+    def test_update_file_with_https_url
+      enable_mock("http://www.warwickshire.gov.uk:443/")
+      create_partial_for('https://www.warwickshire.gov.uk')
+      test_update_file
     end
 
     def test_update_file_with_output_modifier
@@ -84,6 +82,19 @@ module RemotePartial
     def test_update_file_not_affected_by_stale_state
       test_update_stale_at
       test_update_file
+    end
+
+    def create_partial_for(url)
+      @first_p = '<p>One</p>'
+      @body = "<body><h1>Foo</h1><div>#{@first_p}<p>Bar</p></div></body>"
+      enable_mock(url, @body)
+
+      @partial = Partial.create(
+        name: :simple,
+        url: url,
+        criteria: 'p:first-child',
+        repeat_period:  10.minutes
+      )
     end
 
   end

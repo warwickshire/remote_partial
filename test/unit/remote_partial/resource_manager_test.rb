@@ -26,6 +26,21 @@ module RemotePartial
       assert_equal raw, ResourceManager.get_raw(@url)
     end
 
+    def test_get_raw_with_http
+      url = "https://www.worcestershire.gov.uk"
+      enable_mock(url, @body)
+      enable_mock("http://www.worcestershire.gov.uk:443")
+      uri = URI.parse(url)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+      request = Net::HTTP::Get.new(uri.request_uri)
+      response = http.request(request)
+      raw = response.body
+      assert_equal raw, ResourceManager.get_raw(url)
+    end
+
     def test_html
       resource_manager = ResourceManager.new(@url)
       assert_equal raw_content, resource_manager.html

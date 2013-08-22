@@ -10,7 +10,7 @@ module RemotePartial
     end
 
     def self.get_raw(url)
-      response = Net::HTTP.get_response(URI(url))
+      response = get_response(url)
       
       case response.code.to_i
       when ok_response_codes
@@ -22,6 +22,19 @@ module RemotePartial
       end
     rescue => exception # Do main exception raising outside of case statement so that SocketErrors are also handled
       raise RemotePartialRetrivalError.new(url, exception)
+    end
+
+    def self.get_response(url)
+      uri = URI.parse(url)
+      http = Net::HTTP.new(uri.host, uri.port)
+
+      if uri.port == 443
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
+
+      request = Net::HTTP::Get.new(uri.request_uri)
+      http.request(request)
     end
 
     def initialize(url, criteria = nil, &output_modifier)

@@ -1,9 +1,13 @@
 module RemotePartial
-  VERSION = "0.5.0"
+  VERSION = "0.6.0"
 end
 
 # History
 # =======
+#
+# 0.6.0 Fixes failure to load content from https sites
+# ----------------------------------------------------
+# Whoops. This should have been there from the start.
 #
 # 0.5.0 Improves handling of remote content from Windows system
 # -------------------------------------------------------------
