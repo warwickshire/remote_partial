@@ -1,7 +1,7 @@
 {<img src="https://codeclimate.com/github/warwickshire/remote_partial.png" />}[https://codeclimate.com/github/warwickshire/remote_partial]
 = RemotePartial
 
-This rails engine allows partials to be created from remote content.
+Remote Partial allows partials to be created from remote content.
 
 == Installation
 
@@ -12,7 +12,7 @@ Add this to your Gemfile:
 == Configuration
 
 Prior to version 0.7.0, RemotePartial depended upon Rails to determine some
-of the configuration options. This dependency has been removed, and therefore
+of the configuration options. This dependency has now been removed, and therefore
 some paths will have to be defined when RemotePartial is run outside of Rails
 (Standalone mode).
 
@@ -111,7 +111,7 @@ Alternatively, the content of the remote partial can be accessed via:
 
 == Updating the content
 
-An update can of the existing remote partials can be triggered by running the
+An update of the existing remote partials, can be triggered by running the
 following rake task:
 
     rake remote_partial:update
@@ -122,7 +122,7 @@ If an update process is run before the stale_at time, that partial will not be
 updated.
 
 So once the 'ruby' remote partial has been updated, it will be at least three
-hours before it will be updated again.
+hours before it will be updated again (unless forced).
 
 These is also a rake task that will force all partials to update irrespective
 of the stale_at time:
@@ -138,6 +138,6 @@ logged, and a retrieval will be tried again at the next update.
 
 The current state of each defined remote partial is stored in a YAML file:
 
-    db/remote_partial/partials.yml
+    db/remote_partial/partial.yml
 
 This project wobbles and uses MIT-LICENSE.
