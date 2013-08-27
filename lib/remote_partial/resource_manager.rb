@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'net/http'
+require 'fileutils'
 
 module RemotePartial
   class ResourceManager

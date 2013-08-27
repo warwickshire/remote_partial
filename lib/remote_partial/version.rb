@@ -1,9 +1,14 @@
 module RemotePartial
-  VERSION = "0.7.0"
+  VERSION = "0.7.1"
 end
 
 # History
 # =======
+#
+# 0.7.1 Ensures code works in standalone mode
+# -------------------------------------------
+# An additional require statement to load all the required libraries when not
+# relying on Rails to load them.
 #
 # 0.7.0 Removes dependency on Rails
 # ---------------------------------
