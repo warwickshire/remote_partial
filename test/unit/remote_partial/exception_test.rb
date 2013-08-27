@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module RemotePartial
-  class ExceptionTest < ActiveSupport::TestCase
+  class ExceptionTest < MiniTest::Unit::TestCase
     def test_remote_partial_retrival_error
       inner_message = 'Whoops'
       catch_exception { raise RemotePartialRetrivalError.new(inner_message, Array)}

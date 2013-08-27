@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module RemotePartial
-  class YamlStoreTest < ActiveSupport::TestCase
+  class YamlStoreTest < MiniTest::Unit::TestCase
 
     def teardown
       File.delete(YamlStore.file) if File.exists?(YamlStore.file)
@@ -12,7 +12,7 @@ module RemotePartial
     end
     
     def test_file
-      expected = File.expand_path('remote_partial/yaml_stores.yml', test_db_path)
+      expected = File.expand_path('remote_partial/yaml_store.yml', test_db_path)
       assert_equal(expected, YamlStore.file)
     end
 
@@ -61,7 +61,7 @@ module RemotePartial
     def test_save_without_a_name
       hash = {foo: 'bar'}
       yaml_store = YamlStore.new(hash)
-      assert_raise RuntimeError do
+      assert_raises RuntimeError do
         yaml_store.save
       end
     end
@@ -112,11 +112,11 @@ module RemotePartial
     def test_created_at
       yaml_store = YamlStore.create(name: 'foo')
       assert  yaml_store.created_at.kind_of?(Time), 'create_at should be a Time'
-      assert 1.minute.ago < yaml_store.created_at, 'created_at should be within the last minute'
+      assert TimeCalc.minutes_ago(1) < yaml_store.created_at, 'created_at should be within the last minute'
     end
 
     def test_created_at_not_updated_if_exists
-      time = 1.day.ago
+      time = TimeCalc.days_ago(1)
       yaml_store = YamlStore.create(name: 'foo', created_at: time)
       assert_equal(time, yaml_store.created_at)
     end
@@ -124,13 +124,13 @@ module RemotePartial
     def test_updated_at
       yaml_store = YamlStore.create(name: 'foo')
       assert  yaml_store.updated_at.kind_of?(Time), 'updated_at should be a Time'
-      assert 1.minute.ago < yaml_store.updated_at, 'updated_at should be within the last minute'
+      assert TimeCalc.minutes_ago(1) < yaml_store.updated_at, 'updated_at should be within the last minute'
     end
 
     def test_updated_at_if_updated_if_exists
-      time = 1.day.ago
+      time = TimeCalc.days_ago(1)
       yaml_store = YamlStore.create(name: 'foo', updated_at: time)
-      assert 1.minute.ago < yaml_store.updated_at, 'updated_at should be within the last minute'
+      assert TimeCalc.minutes_ago(1) < yaml_store.updated_at, 'updated_at should be within the last minute'
     end
 
     def test_string_keys
@@ -140,7 +140,7 @@ module RemotePartial
     end
 
     def test_db_path
-      File.expand_path('../../dummy/test/db', File.dirname(__FILE__))
+      File.expand_path('../../db', File.dirname(__FILE__))
     end
   end
 end

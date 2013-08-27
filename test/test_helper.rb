@@ -1,23 +1,13 @@
-# Configure Rails Environment
-ENV["RAILS_ENV"] = "test"
-
-require File.expand_path("../dummy/config/environment.rb",  __FILE__)
-require "rails/test_help"
+require 'minitest/unit'
 require 'webmock'
 require 'webmock/minitest'
 require 'webmock/test_unit'
+require_relative '../lib/remote_partial'
 
-Rails.backtrace_cleaner.remove_silencers!
+RemotePartial.root = File.expand_path('..', __FILE__)
+RemotePartial.logger_file = 'log/test.log'
 
-# Load support files
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
-
-# Load fixtures from the engine
-if ActiveSupport::TestCase.method_defined?(:fixture_path=)
-  ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures", __FILE__)
-end
-
-class ActiveSupport::TestCase
+class MiniTest::Unit::TestCase
 
   def enable_mock(url, body = '<body><h1>Something</h1><p>Else</p></body>')
     stub_request(:get, url).
@@ -65,6 +55,37 @@ class ActiveSupport::TestCase
     remove_output_file
     test.call
     assert_file_does_not_exist @partial.output_file_name
+  end
+
+  def assert_difference(expression, difference = 1, message = nil, &block)
+    expressions = Array(expression)
+
+    exps = expressions.map { |e|
+      e.respond_to?(:call) ? e : lambda { eval(e, block.binding) }
+    }
+    before = exps.map { |e| e.call }
+
+    yield
+
+    expressions.zip(exps).each_with_index do |(code, e), i|
+      error  = "#{code.inspect} didn't change by #{difference}"
+      error  = "#{message}.\n#{error}" if message
+      assert_equal(before[i] + difference, e.call, error)
+    end
+  end
+
+  def assert_no_difference(expression, message = nil, &block)
+    assert_difference expression, 0, message, &block
+  end
+
+  def assert_log_entry_added(text, &block)
+    RemotePartial.logger.info 'Preparing to test logging via assert_log_entry_added'
+    before = File.size(RemotePartial.logger_file)
+    block.call
+    assert(before < File.size(RemotePartial.logger_file), "#{RemotePartial.logger_file} should have increased in size")
+    last_entry = File.readlines(RemotePartial.logger_file).last
+    assert_match text, last_entry, "Logger output should contain #{text}"
+
   end
 
   def remove_output_file

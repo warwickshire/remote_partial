@@ -1,14 +1,14 @@
 require 'test_helper'
 
 module RemotePartial
-  class BuilderTest < ActiveSupport::TestCase
+  class BuilderTest < MiniTest::Unit::TestCase
 
     def setup
       @partial = Partial.create(
         name: 'simple',
         url: 'http://www.warwickshire.gov.uk',
         criteria: 'p:first-child',
-        repeat_period:  10.minutes
+        repeat_period:  TimeCalc.minutes(10)
       )
       @name = 'foo'
       @url = @partial.url
@@ -76,12 +76,14 @@ module RemotePartial
 
     def test_build_with_http_error
       enable_mock_connection_failure @url
-      assert_output_file_not_updated do
-        assert_no_difference 'RemotePartial::Partial.count' do
-          Builder.build(
-            url: @partial.url,
-            name: @partial.name
-          )
+      assert_log_entry_added('HTTPBadRequest') do
+        assert_output_file_not_updated do
+          assert_no_difference 'RemotePartial::Partial.count' do
+            Builder.build(
+              url: @partial.url,
+              name: @partial.name
+            )
+          end
         end
       end
     end
@@ -98,12 +100,13 @@ module RemotePartial
       assert_difference 'RemotePartial::Partial.count' do
         Builder.build(
           url: @partial.url,
-          name: 'partial_with_mod',
+          name: name,
           output_modifier: output_modifier
         )
       end
       partial = Partial.find(name)
       assert_equal(output_modifier, partial.output_modifier)
+      remove_file(partial.output_file_name)
     end
 
     def assert_expected_file_created(&test)

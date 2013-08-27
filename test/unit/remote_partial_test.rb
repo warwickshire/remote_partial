@@ -1,33 +1,47 @@
 require 'test_helper'
 
-class RemotePartialTest < ActiveSupport::TestCase
+class RemotePartialTest < MiniTest::Unit::TestCase
+
+  def setup
+    enable_mock url, 'Some content'
+  end
 
   def teardown
-    File.delete(RemotePartial::Partial.file) if File.exists?(RemotePartial::Partial.file)
+    remove_file(RemotePartial::Partial.file)
   end
 
   def test_define_with_string_keys
-    url = 'http://www.warwickshire.gov.uk'
-    name = 'wcc'
     assert_difference 'RemotePartial::Partial.count' do
       RemotePartial.define(
         'url' => url,
         'name' => name
       )
     end
-    assert_equal(url, RemotePartial::Partial.find(name).url)
+    assert_partial_content_correct
   end
 
-  def test_define
-    url = 'http://www.warwickshire.gov.uk'
-    name = 'wcc'
+  def test_define   
     assert_difference 'RemotePartial::Partial.count' do
       RemotePartial.define(
         url: url,
         name: name
       )
     end
-    assert_equal(url, RemotePartial::Partial.find(name).url)
+    assert_partial_content_correct
+  end
+
+  def url
+    'http://www.warwickshire.gov.uk'
+  end
+
+  def name
+    'wcc'
+  end
+
+  def assert_partial_content_correct
+    partial = RemotePartial::Partial.find(name)
+    assert_equal(url, partial.url)
+    remove_file(partial.output_file_name)
   end
 
 end

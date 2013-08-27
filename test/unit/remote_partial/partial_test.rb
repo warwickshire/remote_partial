@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module RemotePartial
-  class PartialTest < ActiveSupport::TestCase
+  class PartialTest < MiniTest::Unit::TestCase
 
     def setup
       create_partial_for('http://www.warwickshire.gov.uk')
@@ -39,30 +39,30 @@ module RemotePartial
     def test_update_stale_at
       @partial.update_stale_at
       @expected = @partial.updated_at + @partial.repeat_period
-      assert_equal @expected.to_s(:db), @partial.stale_at.to_s(:db)
+      assert_equal @expected.to_s, @partial.stale_at.to_s
     end
 
     def test_stale_at_gets_into_hash
       test_update_stale_at
       hash = @partial.to_hash
-      assert_equal @expected.to_s(:db), hash['stale_at'].to_s(:db)
+      assert_equal @expected.to_s, hash['stale_at'].to_s
     end
 
     def test_stale_at_gets_into_file
       test_update_stale_at
       partial = Partial.find(@partial.name)
-      assert_equal partial.stale_at, @partial.stale_at
+      assert_equal partial.stale_at.to_s, @partial.stale_at.to_s
     end
 
     def test_stale_at_not_updated_unless_stale
       test_update_stale_at
-      before = @partial.stale_at
+      before = @partial.stale_at.to_s
       @partial.update_stale_at
-      assert_equal before, @partial.stale_at
+      assert_equal before, @partial.stale_at.to_s
     end
 
     def test_stale_at_reset_if_stale
-      @partial.stale_at = 1.hour.ago
+      @partial.stale_at = TimeCalc.hours_ago(1)
       test_update_stale_at
     end
 
@@ -93,7 +93,7 @@ module RemotePartial
         name: :simple,
         url: url,
         criteria: 'p:first-child',
-        repeat_period:  10.minutes
+        repeat_period:  TimeCalc.minutes_ago(10)
       )
     end
 

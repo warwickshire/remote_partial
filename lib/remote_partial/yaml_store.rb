@@ -33,12 +33,12 @@ module RemotePartial
     end
 
     def self.file
-      @file ||= File.expand_path("#{name.tableize}.yml", root)
+      @file ||= File.expand_path("#{underscore(name)}.yml", root)
     end
 
     def self.root
-      location = Rails.env == 'test' ? 'test/db' : 'db'
-      File.expand_path(location, Rails.root)
+      location = 'db'
+      File.expand_path(location, RemotePartial.root)
     end
 
     def self.dir
@@ -74,6 +74,16 @@ module RemotePartial
         Dir.mkdir(current_path) unless Dir.exists?(current_path)
         current_path
       end
+    end
+
+    def self.underscore(camel_cased_word)
+      word = camel_cased_word.to_s.dup
+      word.gsub!('::', '/')
+      word.gsub!(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2')
+      word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
+      word.tr!("-", "_")
+      word.downcase!
+      word
     end
 
     def update_time_stamps

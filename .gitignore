@@ -1,15 +1,7 @@
 .bundle/
-log/*.log
+test/log/*.log
 pkg/
-test/dummy/db/*.sqlite3
-test/dummy/log/*.log
-test/dummy/tmp/
-test/dummy/.sass-cache
 
-# ignore files created by application
-test/dummy/app/views/remote_partials/
-test/dummy/db/remote_partial/
-test/dummy/test/db/
 
 # rvm configuration file
 .rvmrc
@@ -18,5 +10,5 @@ test/dummy/test/db/
 # ignore gem files
 *.gem
 
-# ignore Gemfile.lock as this is an engine
+# ignore Gemfile.lock as this is a gem to be hosted within another app
 Gemfile.lock

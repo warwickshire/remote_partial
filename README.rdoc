@@ -9,9 +9,47 @@ Add this to your Gemfile:
 
     gem 'remote_partial'
 
+== Configuration
+
+Prior to version 0.7.0, RemotePartial depended upon Rails to determine some
+of the configuration options. This dependency has been removed, and therefore
+some paths will have to be defined when RemotePartial is run outside of Rails
+(Standalone mode).
+
+=== Standalone
+
+The root location needs to be defined. For example:
+
+    RemotePartial.root = 'some/path'
+
+With this defined:
+
+    some/path/db/remote_partial --> location for yaml file storing state information
+    some/path/remote_partials   --> output path, where partials will be created
+
+=== Within a Rails environment
+
+The root is defined as Rails.root, and partials will be placed in the app/views
+folder. Paths relative to Rails.root will then be:
+
+    db/remote_partial --> location for yaml file storing state information
+    app/views/remote_partials   --> output path, where partials will be created
+
+=== Logging
+
+In a Rails environment, the Rails logger will be used, otherwise the default
+logging is to STDOUT.
+
+Logging output to a specific file can be configured like this:
+
+    RemotePartial.logger_file = 'log/remote_partial.log'
+
+Note that the location will be relative to RemotePartial.root, and the 'log'
+folder will need to exist.
+
 == Defining a remote partial
 
-Define the remote partials in an initializer (config/initializers/remote_partial.rb)
+Running this command:
 
     RemotePartial.define(
       url: 'http://www.ruby-lang.org/en/',
@@ -20,13 +58,19 @@ Define the remote partials in an initializer (config/initializers/remote_partial
       minimum_life: 3.hours
     )
 
-This will create a partial at:
+will create a partial at:
 
-    app/veiws/remote_partials/_ruby.html.erb
+    app/views/remote_partials/_ruby.html.erb
 
 The content of this partial will be grabbed from the page at the url, and will
 comprise the content defined by '#intro' (that is, the content of the tag with
 an id='intro'). This content will not be updated for at least 3 hours.
+
+=== In Rails
+
+If you define the remote partials in an initializer (for example
+config/initializers/remote_partial.rb), the remote partial will be updated
+each time the Rails app is started.
 
 == Criteria
 
@@ -60,10 +104,15 @@ To output the content of the remote partial 'ruby' to a rails view add this:
 
     <%= render 'remote_partials/ruby' %>
 
+Alternatively, the content of the remote partial can be accessed via:
+
+    partial = RemotePartial::Partial.find('ruby')
+    File.read(partial.output_file_name)
+
 == Updating the content
 
-The content update process is run each time the host app is loaded. An update can
-also be triggered by running the follow rake task:
+An update can of the existing remote partials can be triggered by running the
+following rake task:
 
     rake remote_partial:update
 
@@ -84,12 +133,6 @@ of the stale_at time:
 
 If remote partial is unable to retrieve remote content, the problem will be
 logged, and a retrieval will be tried again at the next update.
-
-== The partial view folder
-
-Remote partials are held in:
-
-    Rails.root + '/app/views/remote_partials'
 
 == Persistence
 

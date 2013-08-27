@@ -4,6 +4,11 @@ module RemotePartial
 
     attr_accessor :stale_at, :repeat_period
 
+    def self.create(hash)
+      super
+
+    end
+
     def output_file_name
       [partial_folder, file_name].join("/")
     end
@@ -18,7 +23,7 @@ module RemotePartial
     end
 
     def criteria
-      super if super.present? # ensure criteria doesn't return empty string
+      super if present?(super)
     end
 
     def resource_manager
@@ -26,11 +31,11 @@ module RemotePartial
     end
     
     def repeat_period
-      @repeat_period ||= default_repeat_period
+      @repeat_period ||= determine_repeat_period.to_f
     end
 
     def default_repeat_period
-      1.minute
+      TimeCalc.minutes(1)
     end
 
     def update_stale_at
@@ -47,7 +52,7 @@ module RemotePartial
     end
 
     def stale?
-      stale_at.blank? or stale_at < Time.now
+      stale_at_blank? or stale_at < Time.now
     end
 
     def to_hash
@@ -67,5 +72,21 @@ module RemotePartial
       output_modifier? ? instance_eval("lambda #{output_modifier}") : nil
     end
 
+    def stale_at_blank?
+      return true unless stale_at
+      !stale_at.kind_of? Time
+    end
+
+    def present?(item)
+      item and item.to_s !~ empty_string_pattern
+    end
+
+    def empty_string_pattern
+      /\A\s*\Z/
+    end
+
+    def determine_repeat_period
+      self[:repeat_period] || self['repeat_period'] || default_repeat_period
+    end
   end
 end

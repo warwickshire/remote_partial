@@ -1,9 +1,16 @@
 module RemotePartial
-  VERSION = "0.6.0"
+  VERSION = "0.7.0"
 end
 
 # History
 # =======
+#
+# 0.7.0 Removes dependency on Rails
+# ---------------------------------
+# The rails dependency was only required to determine a couple of paths,
+# and to generate a helper that I don't think was actually that useful.
+# RemotePartial will stills work with Rails to determine default output
+# paths, but is no longer dependant on it.
 #
 # 0.6.0 Fixes failure to load content from https sites
 # ----------------------------------------------------
