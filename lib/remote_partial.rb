@@ -1,6 +1,6 @@
 required_items = [:exceptions, :time_calc, :yaml_store, :partial, :resource_manager, :builder]
 required_items.each{|item| require_relative "remote_partial/#{item}"}
-
+require_relative('remote_partial/railtie') if defined? Rails
 
 module RemotePartial
 

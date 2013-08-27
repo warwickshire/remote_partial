@@ -38,7 +38,7 @@ folder. Paths relative to Rails.root will then be:
 === Logging
 
 In a Rails environment, the Rails logger will be used, otherwise the default
-logging is to STDOUT.
+logging is STDOUT.
 
 Logging output to a specific file can be configured like this:
 
