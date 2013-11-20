@@ -1,3 +1,4 @@
+require 'pathname'
 require 'minitest/unit'
 require 'webmock'
 require 'webmock/minitest'
