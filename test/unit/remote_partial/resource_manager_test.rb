@@ -101,6 +101,21 @@ module RemotePartial
       assert_equal({host: '10.10.10.254', port: 8080, user: 'fred', password: 'daphne'}, proxy_details)
     end
 
+    def test_get_proxy_is_called_for_requests
+      # I couldn't find a non-fragile way to mock/stub a class method with MiniTest and didn't want to include
+      # a different mocking library/dependency just for this ...
+      accessed = false
+      original_method = ResourceManager.method(:get_proxy)
+      ResourceManager.define_singleton_method(:get_proxy) { accessed = true; {} }
+
+      # this should call our get_proxy method
+      ResourceManager.get_response(@url)
+
+      ResourceManager.define_singleton_method(:get_proxy, original_method)
+
+      assert accessed, "get_proxy was not called"
+    end
+
     def raw_content
       Net::HTTP.get(URI(@url))
     end
