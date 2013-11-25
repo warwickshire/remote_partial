@@ -1,4 +1,5 @@
 {<img src="https://codeclimate.com/github/warwickshire/remote_partial.png" />}[https://codeclimate.com/github/warwickshire/remote_partial]
+{<img src="https://badge.fury.io/rb/remote_partial.png" alt="Gem Version" />}[http://badge.fury.io/rb/remote_partial]
 = RemotePartial
 
 Remote Partial allows partials to be created from remote content.

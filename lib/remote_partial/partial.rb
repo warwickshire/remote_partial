@@ -4,11 +4,6 @@ module RemotePartial
 
     attr_accessor :stale_at, :repeat_period
 
-    def self.create(hash)
-      super
-
-    end
-
     def output_file_name
       [partial_folder, file_name].join("/")
     end
