@@ -27,9 +27,8 @@ module RemotePartial
 
     def self.get_response(url)
       uri = URI.parse(url)
-      p_params = get_proxy
 
-      http = Net::HTTP.new(uri.host, uri.port, p_params[:host], p_params[:port], p_params[:user], p_params[:password])
+      http = Net::HTTP.new(*connection_settings(uri))
 
       if uri.port == 443
         http.use_ssl = true
@@ -38,6 +37,10 @@ module RemotePartial
 
       request = Net::HTTP::Get.new(uri.request_uri)
       http.request(request)
+    end
+
+    def self.connection_settings(uri)
+      [uri.host, uri.port] + proxy_settings
     end
 
     def initialize(url, criteria = nil, &output_modifier)
@@ -96,19 +99,12 @@ module RemotePartial
       300..399
     end
 
-    def self.get_proxy
-      params = {}
-      http_proxy = ENV['http_proxy']
-
-      unless http_proxy.nil?
-        uri = URI.parse(http_proxy)
-        params[:host] = uri.host
-        params[:port] = uri.port
-        params[:user] = uri.user
-        params[:password] = uri.password
-      end
-      params
+    def self.proxy_settings
+      return [] unless ENV['http_proxy']
+      proxy = URI.parse(ENV['http_proxy'])
+      [proxy.host, proxy.port, proxy.user, proxy.password]
     end
+
 
   end
 end

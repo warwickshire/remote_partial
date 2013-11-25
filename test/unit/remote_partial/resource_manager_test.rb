@@ -85,35 +85,23 @@ module RemotePartial
 
     def test_http_proxy_environment_variable_not_set
       ENV.delete('http_proxy')
-      proxy_details = ResourceManager.send(:get_proxy)
-      assert_equal({}, proxy_details)
+      uri = URI.parse @url
+      settings = ResourceManager.connection_settings(uri)
+      assert_equal([uri.host, uri.port], settings)
     end
 
     def test_http_proxy_environment_variable_without_credentials
       ENV['http_proxy'] = "http://10.10.10.254:8080"
-      proxy_details = ResourceManager.send(:get_proxy)
-      assert_equal({host: '10.10.10.254', port: 8080, user: nil, password: nil}, proxy_details)
+      uri = URI.parse @url
+      settings = ResourceManager.connection_settings(uri)
+      assert_equal([uri.host, uri.port, '10.10.10.254', 8080, nil, nil], settings)
     end
 
     def test_http_proxy_environment_variable_with_credentials
       ENV['http_proxy'] = "http://fred:daphne@10.10.10.254:8080"
-      proxy_details = ResourceManager.send(:get_proxy)
-      assert_equal({host: '10.10.10.254', port: 8080, user: 'fred', password: 'daphne'}, proxy_details)
-    end
-
-    def test_get_proxy_is_called_for_requests
-      # I couldn't find a non-fragile way to mock/stub a class method with MiniTest and didn't want to include
-      # a different mocking library/dependency just for this ...
-      accessed = false
-      original_method = ResourceManager.method(:get_proxy)
-      ResourceManager.define_singleton_method(:get_proxy) { accessed = true; {} }
-
-      # this should call our get_proxy method
-      ResourceManager.get_response(@url)
-
-      ResourceManager.define_singleton_method(:get_proxy, original_method)
-
-      assert accessed, "get_proxy was not called"
+      uri = URI.parse @url
+      settings = ResourceManager.connection_settings(uri)
+      assert_equal([uri.host, uri.port, '10.10.10.254', 8080, 'fred', 'daphne'], settings)
     end
 
     def raw_content
