@@ -69,7 +69,7 @@ module RemotePartial
       assert_equal_ignoring_cr(@body, File.read(@path))
     end
 
-    def test_connection_failure    
+    def test_connection_failure
       enable_mock_connection_failure @url
       assert_raises RemotePartialRetrivalError do
         ResourceManager.new(@url, 'body').html
@@ -83,6 +83,27 @@ module RemotePartial
       end
     end
 
+    def test_http_proxy_environment_variable_not_set
+      ENV.delete('http_proxy')
+      uri = URI.parse @url
+      settings = ResourceManager.connection_settings(uri)
+      assert_equal([uri.host, uri.port], settings)
+    end
+
+    def test_http_proxy_environment_variable_without_credentials
+      ENV['http_proxy'] = "http://10.10.10.254:8080"
+      uri = URI.parse @url
+      settings = ResourceManager.connection_settings(uri)
+      assert_equal([uri.host, uri.port, '10.10.10.254', 8080, nil, nil], settings)
+    end
+
+    def test_http_proxy_environment_variable_with_credentials
+      ENV['http_proxy'] = "http://fred:daphne@10.10.10.254:8080"
+      uri = URI.parse @url
+      settings = ResourceManager.connection_settings(uri)
+      assert_equal([uri.host, uri.port, '10.10.10.254', 8080, 'fred', 'daphne'], settings)
+    end
+
     def raw_content
       Net::HTTP.get(URI(@url))
     end
@@ -90,8 +111,6 @@ module RemotePartial
     def content
       Nokogiri::HTML(raw_content)
     end
-
-
 
   end
 end

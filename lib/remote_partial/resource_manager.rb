@@ -12,7 +12,7 @@ module RemotePartial
 
     def self.get_raw(url)
       response = get_response(url)
-      
+
       case response.code.to_i
       when ok_response_codes
         return response.body
@@ -27,7 +27,8 @@ module RemotePartial
 
     def self.get_response(url)
       uri = URI.parse(url)
-      http = Net::HTTP.new(uri.host, uri.port)
+
+      http = Net::HTTP.new(*connection_settings(uri))
 
       if uri.port == 443
         http.use_ssl = true
@@ -36,6 +37,10 @@ module RemotePartial
 
       request = Net::HTTP::Get.new(uri.request_uri)
       http.request(request)
+    end
+
+    def self.connection_settings(uri)
+      [uri.host, uri.port] + proxy_settings
     end
 
     def initialize(url, criteria = nil, &output_modifier)
@@ -56,6 +61,7 @@ module RemotePartial
     end
 
     private
+
     def get_whole_page
       self.class.get_raw(@url).force_encoding(encoding).gsub(windows_bom_text, "")
     end
@@ -92,6 +98,13 @@ module RemotePartial
     def self.redirect_response_codes
       300..399
     end
+
+    def self.proxy_settings
+      return [] unless ENV['http_proxy']
+      proxy = URI.parse(ENV['http_proxy'])
+      [proxy.host, proxy.port, proxy.user, proxy.password]
+    end
+
 
   end
 end
