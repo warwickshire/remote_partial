@@ -1,9 +1,13 @@
 module RemotePartial
-  VERSION = "0.7.1"
+  VERSION = "0.7.2"
 end
 
 # History
 # =======
+#
+# 0.7.2 Adds facility to direct HTTP through proxy
+# ------------------------------------------------
+#
 #
 # 0.7.1 Ensures code works in standalone mode
 # -------------------------------------------

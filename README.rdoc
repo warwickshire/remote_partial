@@ -130,6 +130,13 @@ of the stale_at time:
 
     rake remote_partial:force_update
 
+== Connection via a proxy
+
+RemotePartial can be modified to connect to the remote source via a proxy. To
+do this set the environment variable http_proxy to the proxy url:
+
+    ENV['http_proxy'] = "http://proxy.example.com:8080"
+
 == Problems grabbing content
 
 If remote partial is unable to retrieve remote content, the problem will be
