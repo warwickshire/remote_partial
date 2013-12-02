@@ -30,10 +30,11 @@ With this defined:
 
 === Within a Rails environment
 
-The root is defined as Rails.root, and partials will be placed in the app/views
-folder. Paths relative to Rails.root will then be:
+The root will be Rails.root, unless RemotePartial.root is explicitly defined.
 
-    db/remote_partial --> location for yaml file storing state information
+Partials will be placed in the app/views folder. Paths relative to root will then be:
+
+    db/remote_partial           --> location for yaml file storing state information
     app/views/remote_partials   --> output path, where partials will be created
 
 === Logging

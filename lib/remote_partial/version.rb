@@ -1,13 +1,18 @@
 module RemotePartial
-  VERSION = "0.7.2"
+  VERSION = "0.7.3"
 end
 
 # History
 # =======
 #
+# 0.7.3 Improves folder location when root defined and Rails exists
+# ------------------------------------------------------------------
+# If a rails app was mounted within a rack app, the view path pointed
+# at the mounted rails app location rather than being relative to the host
+# rack app. This bug is fixed in this version.
+#
 # 0.7.2 Adds facility to direct HTTP through proxy
 # ------------------------------------------------
-#
 #
 # 0.7.1 Ensures code works in standalone mode
 # -------------------------------------------

@@ -10,7 +10,7 @@ module RemotePartial
 
   def self.partial_location
     if defined?(Rails)
-      File.expand_path('app/views/remote_partials', Rails.root)
+      File.expand_path('app/views/remote_partials', root)
     else
       File.expand_path('remote_partials', root)
     end
